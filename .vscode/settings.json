@@ -3,5 +3,6 @@
   "editor.tabSize": 2,
   "prettier.disableLanguages": ["vue", "css"],
   "prettier.printWidth": 160,
-  "prettier.tabWidth": 2
+  "prettier.tabWidth": 2,
+  "twig-language.tabSize": 2
 }
