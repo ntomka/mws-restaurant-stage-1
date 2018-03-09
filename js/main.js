@@ -8,6 +8,9 @@ var markers = [];
 document.addEventListener('DOMContentLoaded', event => {
   fetchNeighborhoods();
   fetchCuisines();
+
+  document.getElementById('neighborhoods-select').onchange = updateRestaurants;
+  document.getElementById('cuisines-select').onchange = updateRestaurants;
 });
 
 /**
@@ -106,15 +109,6 @@ updateRestaurants = () => {
     }
   });
 };
-
-document.addEventListener(
-  'DOMContentLoaded',
-  function() {
-    document.getElementById('neighborhoods-select').onchange = updateRestaurants;
-    document.getElementById('cuisines-select').onchange = updateRestaurants;
-  },
-  false
-);
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
