@@ -151,6 +151,14 @@ class DBHelper {
   }
 
   /**
+   * Restaurant srcset image URL.
+   */
+  static imageSrcSetUrlForRestaurant(restaurant) {
+    const finfo = restaurant.photograph.split(/\./);
+    return `/img_dist/${finfo[0]}-660_2x.${finfo[1]} 2x, /img_dist/${finfo[0]}-330_1x.${finfo[1]}`;
+  }
+
+  /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
