@@ -165,6 +165,11 @@ class DBHelper {
     return `/img/${restaurant.photograph}`;
   }
 
+  static imageSrcSetUrlForReviewPage(restaurant) {
+    const finfo = restaurant.photograph.split(/\./);
+    return `/img/${restaurant.photograph} 800w, /img_dist/${finfo[0]}-660_2x.${finfo[1]} 660w, /img_dist/${finfo[0]}-330_1x.${finfo[1]} 330w`;
+  }
+
   /**
    * Map marker for a restaurant.
    */
