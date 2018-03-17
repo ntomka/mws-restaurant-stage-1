@@ -7,7 +7,7 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    return `${window.location.origin}:${window.location.port}/data/restaurants.json`;
+    return `${window.location.origin}/data/restaurants.json`;
   }
 
   /**

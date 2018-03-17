@@ -1,5 +1,5 @@
 const appCaches = {
-  static: 'restaurant-static-v1',
+  static: 'restaurant-static-v2',
   images: 'restaurant-images-v1'
 };
 
