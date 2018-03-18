@@ -167,19 +167,25 @@ createRestaurantHTML = restaurant => {
 
   const figcaption = document.createElement('figcaption');
   figcaption.innerHTML = restaurant.name;
+  figcaption.tabIndex = 0;
+  figcaption.setAttribute('aria-label', `${restaurant.name} restaurant`);
   figure.append(figcaption);
 
   li.append(figure);
 
   const divContainer = document.createElement('div');
+  divContainer.tabIndex = 0;
+  divContainer.setAttribute('aria-label', `Address of ${restaurant.name} restaurant`);
   divContainer.className = 'restaurant-info-container';
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.tabIndex = 0;
   divContainer.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.tabIndex = 0;
   divContainer.append(address);
 
   const more = document.createElement('a');
