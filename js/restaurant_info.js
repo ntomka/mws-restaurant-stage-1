@@ -62,6 +62,7 @@ fetchRestaurantFromURL = callback => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.setAttribute('aria-label', `${restaurant.name} restaurant`);
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
@@ -88,6 +89,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.setAttribute('aria-label', `Operating hours of ${self.restaurant.name} restaurant`);
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
