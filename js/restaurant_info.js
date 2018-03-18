@@ -24,6 +24,7 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      document.getElementById('map-container').setAttribute('aria-label', `Map with ${restaurant.name} restaurant location`);
     }
   });
 };
