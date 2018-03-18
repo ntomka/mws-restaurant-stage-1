@@ -1,6 +1,33 @@
+class DBLoader {
+  static _logError(error) {
+    console.log('Looks like there was a problem: \n', error);
+  }
+
+  static _validateResponse(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
+  static _readResponseAsJSON(response) {
+    return response.json();
+  }
+
+  static fetch(callBack) {
+    fetch('/data/restaurants.json')
+      .then(this._validateResponse)
+      .then(this._readResponseAsJSON)
+      .then(result => {
+        callBack(result.restaurants);
+      })
+      .catch(this._logError);
+  }
+}
+
 const appCaches = {
   static: 'restaurant-static-v2',
-  images: 'restaurant-images-v1'
+  images: 'restaurant-images-v2'
 };
 
 self.addEventListener('install', function(event) {
@@ -15,6 +42,23 @@ self.addEventListener('install', function(event) {
         '/js/main.js',
         '/js/restaurant_info.js'
       ]);
+    })
+  );
+
+  // cache image assets dynamically
+  event.waitUntil(
+    caches.open(appCaches.images).then(function(cache) {
+      DBLoader.fetch(restaurants => {
+        for (const key in restaurants) {
+          if (restaurants.hasOwnProperty(key)) {
+            const restaurant = restaurants[key],
+              finfo = restaurant.photograph.split(/\./);
+            cache.add(`/img/${restaurant.photograph}`);
+            cache.add(`/img_dist/${finfo[0]}-660_2x.${finfo[1]}`);
+            cache.add(`/img_dist/${finfo[0]}-330_1x.${finfo[1]}`);
+          }
+        }
+      });
     })
   );
 });
@@ -59,8 +103,6 @@ self.addEventListener('fetch', function(event) {
 });
 
 function serveImg(request) {
-  // var storageUrl = request.url.replace(/-\d+px\.jpg$/, '');
-
   return caches.open(appCaches.images).then(function(cache) {
     return cache.match(request.url).then(function(response) {
       if (response) return response;
