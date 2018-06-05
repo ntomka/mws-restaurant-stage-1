@@ -15,7 +15,7 @@ class DBLoader {
   }
 
   static fetch(callBack) {
-    fetch('/data/restaurants.json')
+    fetch('http://localhost:1337/restaurants')
       .then(this._validateResponse)
       .then(this._readResponseAsJSON)
       .then(result => {
@@ -53,9 +53,9 @@ self.addEventListener('install', function(event) {
           if (restaurants.hasOwnProperty(key)) {
             const restaurant = restaurants[key],
               finfo = restaurant.photograph.split(/\./);
-            cache.add(`/img/${restaurant.photograph}`);
-            cache.add(`/img_dist/${finfo[0]}-660_2x.${finfo[1]}`);
-            cache.add(`/img_dist/${finfo[0]}-330_1x.${finfo[1]}`);
+            cache.add(`/img/${finfo[0]}.${finfo[1] || 'jpg'}`);
+            cache.add(`/img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'}`);
+            cache.add(`/img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'}`);
           }
         }
       });

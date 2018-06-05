@@ -7,49 +7,40 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    return `${window.location.origin}/data/restaurants.json`;
+    return 'http://localhost:1337/restaurants';
+  }
+
+  static _validateResponse(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
+  static _readResponseAsJSON(response) {
+    return response.json();
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, restaurants);
-      } else {
-        // Oops!. Got an error from server.
-        const error = `Request failed. Returned status of ${xhr.status}`;
-        callback(error, null);
-      }
-    };
-    xhr.send();
+    fetch(DBHelper.DATABASE_URL)
+      .then(this._validateResponse)
+      .then(this._readResponseAsJSON)
+      .then(result => callback(null, result))
+      .catch(error => callback(error, null));
   }
 
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) {
-          // Got the restaurant
-          callback(null, restaurant);
-        } else {
-          // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
-        }
-      }
-    });
+    fetch(`${DBHelper.DATABASE_URL}/${id}`)
+      .then(this._validateResponse)
+      .then(this._readResponseAsJSON)
+      .then(result => callback(null, result))
+      .catch(error => callback('Restaurant does not exist', null));
   }
 
   /**
@@ -154,20 +145,21 @@ class DBHelper {
    * Restaurant srcset image URL.
    */
   static imageSrcSetUrlForRestaurant(restaurant) {
-    const finfo = restaurant.photograph.split(/\./);
-    return `/img_dist/${finfo[0]}-660_2x.${finfo[1]} 2x, /img_dist/${finfo[0]}-330_1x.${finfo[1]}`;
+    const finfo = restaurant.photograph ? restaurant.photograph.split(/\./) : [restaurant.id, 'jpg'];
+    return `/img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 2x, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'}`;
   }
 
   /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return `/img/${restaurant.photograph}`;
+    const finfo = restaurant.photograph ? restaurant.photograph.split(/\./) : [restaurant.id, 'jpg'];
+    return `/img/${finfo[0]}.${finfo[1] || 'jpg'}`;
   }
 
   static imageSrcSetUrlForReviewPage(restaurant) {
-    const finfo = restaurant.photograph.split(/\./);
-    return `/img/${restaurant.photograph} 800w, /img_dist/${finfo[0]}-660_2x.${finfo[1]} 660w, /img_dist/${finfo[0]}-330_1x.${finfo[1]} 330w`;
+    const finfo = restaurant.photograph ? restaurant.photograph.split(/\./) : [restaurant.id, 'jpg'];
+    return `/img/${finfo[0]}.${finfo[1] || 'jpg'} 800w, /img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 660w, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'} 330w`;
   }
 
   /**
