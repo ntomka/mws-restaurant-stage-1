@@ -4,10 +4,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Normalize.css for better cross-browser consistency -->
-    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
-    <!-- Main CSS file -->
-    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <script type="text/javascript">
+      var normalizeCss = document.createElement('link');
+      normalizeCss.rel = 'stylesheet';
+      normalizeCss.src = '//normalize-css.googlecode.com/svn/trunk/normalize.css';
+      normalizeCss.type = 'text/css';
+      var godefer = document.getElementsByTagName('head')[0];
+      godefer.appendChild(normalizeCss);
+
+      var stylesCss = document.createElement('link');
+      stylesCss.rel = 'stylesheet';
+      stylesCss.href = 'dist/styles.css';
+      stylesCss.type = 'text/css';
+      var godefer = document.getElementsByTagName('head')[0];
+      godefer.appendChild(stylesCss);
+    </script>
+    <noscript>
+      <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
+      <link rel="stylesheet" href="dist/styles.css">
+    </noscript>
     <title>Restaurant Info</title>
   </head>
 
@@ -71,9 +86,10 @@
 
     <!-- Beginning scripts -->
     <!-- Database helpers -->
-    <script type="text/javascript" src="js/dbhelper.js"></script>
+    <!--<script type="text/javascript" src="js/dbhelper.js"></script>-->
     <!-- Main javascript file -->
-    <script type="text/javascript" src="js/restaurant_info.js"></script>
+    <!--<script type="text/javascript" src="js/restaurant_info.js"></script>-->
+    <script charset="utf-8" src="dist/restaurant_info.js"></script>
     <!-- Google Maps -->
     <script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPYV1tlwm9ftEe0p0cQWNeeXbptVadGXM&libraries=places&callback=initMap"></script>
     <!-- End scripts -->

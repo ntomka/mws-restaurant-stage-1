@@ -4,8 +4,25 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
-    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript">
+      var normalizeCss = document.createElement('link');
+      normalizeCss.rel = 'stylesheet';
+      normalizeCss.src = '//normalize-css.googlecode.com/svn/trunk/normalize.css';
+      normalizeCss.type = 'text/css';
+      var godefer = document.getElementsByTagName('head')[0];
+      godefer.appendChild(normalizeCss);
+
+      var stylesCss = document.createElement('link');
+      stylesCss.rel = 'stylesheet';
+      stylesCss.href = 'dist/styles.css';
+      stylesCss.type = 'text/css';
+      var godefer = document.getElementsByTagName('head')[0];
+      godefer.appendChild(stylesCss);
+    </script>
+    <noscript>
+      <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css"/>
+      <link rel="stylesheet" href="dist/styles.css">
+    </noscript>
     <title>Restaurant Reviews</title>
   </head>
 
@@ -36,8 +53,7 @@
       </section>
     </main>
 
-    <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-    <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+    <script charset="utf-8" src="dist/main.js"></script>
     <script async="async" defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPYV1tlwm9ftEe0p0cQWNeeXbptVadGXM&libraries=places&callback=initMap"></script>
 
     <footer id="footer">
