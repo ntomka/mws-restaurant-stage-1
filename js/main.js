@@ -214,5 +214,14 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
-  updateRestaurants();
 };
+
+document.addEventListener('DOMContentLoaded', function(event) {
+  updateRestaurants();
+
+  const mapLoader = document.createElement('script');
+  mapLoader.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAPYV1tlwm9ftEe0p0cQWNeeXbptVadGXM&libraries=places&callback=initMap';
+
+  var godefer = document.getElementsByTagName('head')[0];
+  godefer.appendChild(mapLoader);
+});

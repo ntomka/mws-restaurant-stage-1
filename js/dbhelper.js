@@ -1,3 +1,5 @@
+import idb from 'idb';
+
 /**
  * Common database helper functions.
  */
@@ -8,6 +10,27 @@ export default class DBHelper {
    */
   static get DATABASE_URL() {
     return 'http://localhost:1337/restaurants';
+  }
+
+  static get DB_VERSION() {
+    return 1;
+  }
+
+  static get DB_NAME() {
+    return 'restaurants';
+  }
+
+  static get DB_STORE() {
+    return 'list';
+  }
+
+  static get DB() {
+    return idb.open(this.DB_NAME, this.DB_VERSION, upgradeDb => {
+      switch (upgradeDb.oldVersion) {
+        case 0:
+          upgradeDb.createObjectStore(this.DB_STORE, { keyPath: 'id' });
+      }
+    });
   }
 
   static _validateResponse(response) {
@@ -28,8 +51,30 @@ export default class DBHelper {
     fetch(DBHelper.DATABASE_URL)
       .then(this._validateResponse)
       .then(this._readResponseAsJSON)
-      .then(result => callback(null, result))
-      .catch(error => callback(error, null));
+      .then(result => {
+        // add new elements to db
+        this.DB.then(db => {
+          const tx = db.transaction(this.DB_STORE, 'readwrite'),
+            dbStore = tx.objectStore(this.DB_STORE);
+          result.forEach(restaurant => {
+            dbStore.put(restaurant);
+          });
+          return tx.complete;
+        });
+        callback(null, result);
+      })
+      .catch(error => {
+        // offline or something, read from db
+        this.DB
+          .then(db => {
+            const tx = db.transaction(this.DB_STORE),
+              dbStore = tx.objectStore(this.DB_STORE);
+
+            return dbStore.getAll();
+          })
+          .then(restaurants => callback(null, restaurants))
+          .catch(error => callback(error, null));
+      });
   }
 
   /**
@@ -39,8 +84,26 @@ export default class DBHelper {
     fetch(`${DBHelper.DATABASE_URL}/${id}`)
       .then(this._validateResponse)
       .then(this._readResponseAsJSON)
-      .then(result => callback(null, result))
-      .catch(error => callback('Restaurant does not exist', null));
+      .then(result => {
+        // add this element to db if not exists
+        this.DB.then(db => {
+          const tx = db.transaction(this.DB_STORE, 'readwrite'),
+            dbStore = tx.objectStore(this.DB_STORE);
+          dbStore.put(result);
+        });
+        callback(null, result);
+      })
+      .catch(error => {
+        this.DB
+          .then(db => {
+            const tx = db.transaction(this.DB_STORE),
+              dbStore = tx.objectStore(this.DB_STORE);
+
+            return dbStore.get(parseInt(id));
+          })
+          .then(restaurant => callback(null, restaurant))
+          .catch(() => callback('Restaurant does not exist', null));
+      });
   }
 
   /**

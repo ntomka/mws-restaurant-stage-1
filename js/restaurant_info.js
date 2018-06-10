@@ -15,22 +15,33 @@ if ('serviceWorker' in navigator) {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
+  self.map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 16,
+    center: self.restaurant.latlng,
+    scrollwheel: false
+  });
+  DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+  document
+    .getElementById('map-container')
+    .setAttribute('aria-label', `Map with ${self.restaurant.name} restaurant location`);
+};
+
+document.addEventListener('DOMContentLoaded', function(event) {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) {
       // Got an error!
       console.error(error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-      document.getElementById('map-container').setAttribute('aria-label', `Map with ${restaurant.name} restaurant location`);
+
+      const mapLoader = document.createElement('script');
+      mapLoader.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAPYV1tlwm9ftEe0p0cQWNeeXbptVadGXM&libraries=places&callback=initMap';
+
+      var godefer = document.getElementsByTagName('head')[0];
+      godefer.appendChild(mapLoader);
     }
   });
-};
+});
 
 /**
  * Get current restaurant from page URL.

@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var Encore = require('@symfony/webpack-encore');
+const webpack = require('webpack');
+const Encore = require('@symfony/webpack-encore');
 
 Encore
   // the project directory where compiled assets will be stored
@@ -33,4 +33,37 @@ Encore
     })
   );
 
-module.exports = Encore.getWebpackConfig();
+const siteConfig = Encore.getWebpackConfig();
+
+siteConfig.name = 'siteConfig';
+
+Encore.reset();
+
+Encore
+  .setOutputPath('./')
+  .setPublicPath('/')
+  .enableSourceMaps(!Encore.isProduction())
+  .addEntry('sw', './js/sw.js')
+  .configureBabel(babelConfig => {
+    babelConfig.presets.push('stage-3');
+    babelConfig.plugins.push('syntax-dynamic-import');
+
+    for (let i = 0; i < babelConfig.presets.length; i++) {
+      for (let j = 0; j < babelConfig.presets[i].length; j++) {
+        if (babelConfig.presets[i][j] === 'env') {
+          babelConfig.presets[i][j + 1].targets.browsers = ['> 1%', 'last 2 versions', 'ie >= 10'];
+        }
+      }
+    }
+  })
+  .addPlugin(
+    new webpack.ProvidePlugin({
+      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+    })
+  );
+
+const swConfig = Encore.getWebpackConfig();
+
+swConfig.name = 'swConfig';
+
+module.exports = [siteConfig, swConfig];
