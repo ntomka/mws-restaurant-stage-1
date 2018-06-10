@@ -1,4 +1,5 @@
 import DBHelper from './dbhelper';
+import ImageObserver from './intersection_observer';
 
 let restaurants, neighborhoods, cuisines;
 
@@ -89,6 +90,7 @@ const updateRestaurants = () => {
     } else {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
+      ImageObserver();
     }
   });
 };
@@ -128,14 +130,14 @@ const createRestaurantHTML = restaurant => {
   const picture = document.createElement('picture');
 
   const source = document.createElement('source');
-  source.srcset = DBHelper.imageSrcSetUrlForRestaurant(restaurant);
+  source.setAttribute('data-srcset', DBHelper.imageSrcSetUrlForRestaurant(restaurant));
   source.className = 'restaurant-img';
   picture.append(source);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.alt = `${restaurant.name} restaurant`;
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
   picture.append(image);
 
   const figure = document.createElement('figure');
