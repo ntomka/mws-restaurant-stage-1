@@ -30,6 +30,9 @@ self.addEventListener('install', function(event) {
             cache.add(`/img/${finfo[0]}.${finfo[1] || 'jpg'}`);
             cache.add(`/img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'}`);
             cache.add(`/img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'}`);
+            cache.add(`/img_dist/${finfo[0]}.webp`);
+            cache.add(`/img_dist/${finfo[0]}-660_2x.webp`);
+            cache.add(`/img_dist/${finfo[0]}-330_1x.webp`);
           }
         }
       });

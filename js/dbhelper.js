@@ -209,7 +209,8 @@ export default class DBHelper {
    */
   static imageSrcSetUrlForRestaurant(restaurant) {
     const finfo = restaurant.photograph ? restaurant.photograph.split(/\./) : [restaurant.id, 'jpg'];
-    return `/img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 2x, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'}`;
+    return `/img_dist/${finfo[0]}-660_2x.webp 2x, /img_dist/${finfo[0]}-330_1x.webp,
+      /img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 2x, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'}`;
   }
 
   /**
@@ -222,7 +223,8 @@ export default class DBHelper {
 
   static imageSrcSetUrlForReviewPage(restaurant) {
     const finfo = restaurant.photograph ? restaurant.photograph.split(/\./) : [restaurant.id, 'jpg'];
-    return `/img/${finfo[0]}.${finfo[1] || 'jpg'} 800w, /img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 660w, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'} 330w`;
+    return `/img_dist/${finfo[0]}.webp 800w, /img_dist/${finfo[0]}-660_2x.webp 660w, /img_dist/${finfo[0]}-330_1x.webp 330w,
+      /img/${finfo[0]}.${finfo[1] || 'jpg'} 800w, /img_dist/${finfo[0]}-660_2x.${finfo[1] || 'jpg'} 660w, /img_dist/${finfo[0]}-330_1x.${finfo[1] || 'jpg'} 330w`;
   }
 
   /**

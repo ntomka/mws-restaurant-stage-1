@@ -5,6 +5,7 @@ module.exports = function(grunt) {
       dev: {
         options: {
           engine: 'im',
+          concurrency: 2,
           sizes: [
             {
               width: 330,
@@ -24,13 +25,31 @@ module.exports = function(grunt) {
             src: ['*.{gif,jpg,png}'],
             cwd: 'img/',
             dest: 'img_dist/'
+          },
+          {
+            expand: true,
+            src: ['*.webp'],
+            cwd: 'img_dist/',
+            dest: 'img_dist/'
           }
         ]
+      }
+    },
+    webp: {
+      files: {
+        expand: true,
+        cwd: 'img/',
+        src: ['*.{gif,jpg,png}'],
+        dest: 'img_dist/'
+      },
+      options: {
+        quality: 90
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-responsive-images');
-  grunt.registerTask('default', ['clean', 'responsive_images']);
+  grunt.loadNpmTasks('grunt-webp');
+  grunt.registerTask('default', ['clean', 'webp', 'responsive_images']);
 };

@@ -283,6 +283,10 @@ async@^2.1.2, async@^2.4.1:
   dependencies:
     lodash "^4.17.10"
 
+async@~0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
+
 atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
@@ -2324,6 +2328,12 @@ grunt-legacy-util@~1.0.0:
     underscore.string "~3.2.3"
     which "~1.2.1"
 
+grunt-lib-contrib@~0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/grunt-lib-contrib/-/grunt-lib-contrib-0.6.1.tgz#3f56adb7da06e814795ee2415b0ebe5fb8903ebb"
+  dependencies:
+    zlib-browserify "0.0.1"
+
 grunt-responsive-images@^1.10.1:
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/grunt-responsive-images/-/grunt-responsive-images-1.10.1.tgz#5fb24d84444ddb9c282ae87f334142b17726b202"
@@ -2332,6 +2342,13 @@ grunt-responsive-images@^1.10.1:
     gm "~1.23.0"
     grunt ">=0.4.5"
     lodash ">=4.6.1"
+
+grunt-webp@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/grunt-webp/-/grunt-webp-0.0.4.tgz#00a393aa9c9d0cf532fce89d0128da2ffd40f960"
+  dependencies:
+    async "~0.2.10"
+    grunt-lib-contrib "~0.6.1"
 
 grunt@>=0.4.5, grunt@^1.0.2:
   version "1.0.2"
@@ -5311,3 +5328,7 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zlib-browserify@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/zlib-browserify/-/zlib-browserify-0.0.1.tgz#4fa6a45d00dbc15f318a4afa1d9afc0258e176cc"
