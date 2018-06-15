@@ -309,15 +309,13 @@ nav.breadcrumb {
 }
 
 .inside #map-container {
-  background: blue none repeat scroll 0 0;
   width: 100%;
   order: 1;
-  height: 350px;
 }
 
 .inside #map {
   background-color: #ccc;
-  height: 100%;
+  height: 400px;
   width: 100%;
 }
 
@@ -394,6 +392,14 @@ nav.breadcrumb {
     right: 0;
     top: 80px;
     width: 50%;
+  }
+  .inside #map-container #load-map-button {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .inside #map-container #map {
+    height: 100%;
   }
   #restaurant-container,
   #reviews-container {
