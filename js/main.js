@@ -24,7 +24,7 @@ const fetchNeighborhoods = () => {
     } else {
       self.neighborhoods = neighborhoods;
       fillNeighborhoodsHTML();
-      loadMap();
+      // loadMap();
     }
   });
 };
@@ -183,6 +183,10 @@ const createRestaurantHTML = restaurant => {
  * Add markers for current restaurants to the map.
  */
 const addMarkersToMap = (restaurants = self.restaurants) => {
+  if (typeof google === 'undefined') {
+    return;
+  }
+
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
@@ -194,11 +198,17 @@ const addMarkersToMap = (restaurants = self.restaurants) => {
 };
 
 const loadMap = () => {
+  if (typeof google !== 'undefined') {
+    return;
+  }
+
   const mapLoader = document.createElement('script');
   mapLoader.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAPYV1tlwm9ftEe0p0cQWNeeXbptVadGXM&libraries=places&callback=initMap';
 
   var godefer = document.getElementsByTagName('head')[0];
   godefer.appendChild(mapLoader);
+
+  document.getElementById('load-map-button').remove();
 };
 
 /**
@@ -209,8 +219,16 @@ document.addEventListener('DOMContentLoaded', event => {
   fetchNeighborhoods();
   fetchCuisines();
 
-  document.getElementById('neighborhoods-select').onchange = updateRestaurants;
-  document.getElementById('cuisines-select').onchange = updateRestaurants;
+  document.getElementById('neighborhoods-select').onchange = () => {
+    loadMap();
+    updateRestaurants();
+  };
+  document.getElementById('cuisines-select').onchange = () => {
+    loadMap();
+    updateRestaurants();
+  };
+
+  document.getElementById('load-map-button').onclick = loadMap;
 });
 
 /**
@@ -226,4 +244,6 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+
+  addMarkersToMap();
 };

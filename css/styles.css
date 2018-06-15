@@ -64,6 +64,7 @@ nav,
 section {
   display: flex;
   flex-wrap: wrap;
+  margin: 0;
 }
 
 #maincontent {
@@ -151,6 +152,23 @@ nav.breadcrumb {
 
 
 /* ====================== Map ====================== */
+
+#load-map-button {
+  margin: 2rem auto;
+  background-color: #804d11;
+  border: none;
+  color: #fff;
+  display: block;
+  font-size: 10pt;
+  padding: 8px 30px 10px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+#load-map-button + #map {
+  display: none;
+}
 
 #map {
   height: 400px;
