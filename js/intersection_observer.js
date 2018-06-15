@@ -1,5 +1,4 @@
-let elements,
-  prevRatio = 0.0;
+let elements;
 
 const createObserver = () => {
   var observer;
