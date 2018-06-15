@@ -1,8 +1,6 @@
 import DBHelper from './dbhelper';
 import ImageObserver from './intersection_observer';
 
-let restaurants, neighborhoods, cuisines;
-
 self.map;
 self.markers = [];
 
