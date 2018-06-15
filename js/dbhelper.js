@@ -9,7 +9,11 @@ export default class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    return 'http://localhost:1337/restaurants';
+    const protocol= 'https',
+          host = 'tomi.sytes.net',
+          port = '1337';
+
+    return `${protocol}://${host}:${port}/restaurants`;
   }
 
   static get DB_VERSION() {
