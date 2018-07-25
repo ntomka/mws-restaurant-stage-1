@@ -134,9 +134,9 @@ export default class DBHelper {
             const tx = db.transaction(this.DB_REVIEWS_STORE),
                   dbStore = tx.objectStore(this.DB_REVIEWS_STORE);
 
-            return dbStore.get(parseInt(id)).reviews;
+            return dbStore.get(parseInt(id));
           })
-          .then(reviews => callback(null, reviews))
+          .then(result => callback(null, result.reviews))
           .catch(() => callback('No reviews yet!', null));
       });
   }
