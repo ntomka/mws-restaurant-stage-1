@@ -13,11 +13,11 @@ export default class DBHelper {
           host = 'localhost',
           port = '1337';
 
-    return `${protocol}://${host}:${port}/restaurants`;
+    return `${protocol}://${host}:${port}`;
   }
 
   static get DB_VERSION() {
-    return 1;
+    return 2;
   }
 
   static get DB_NAME() {
@@ -28,11 +28,17 @@ export default class DBHelper {
     return 'list';
   }
 
+  static get DB_REVIEWS_STORE() {
+    return 'reviews';
+  }
+
   static get DB() {
     return idb.open(this.DB_NAME, this.DB_VERSION, upgradeDb => {
       switch (upgradeDb.oldVersion) {
         case 0:
           upgradeDb.createObjectStore(this.DB_STORE, { keyPath: 'id' });
+        case 1:
+          upgradeDb.createObjectStore(this.DB_REVIEWS_STORE, { keyPath: 'id' });
       }
     });
   }
@@ -52,7 +58,7 @@ export default class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    fetch(DBHelper.DATABASE_URL)
+    fetch(`${DBHelper.DATABASE_URL}/restaurants`)
       .then(this._validateResponse)
       .then(this._readResponseAsJSON)
       .then(result => {
@@ -85,7 +91,7 @@ export default class DBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    fetch(`${DBHelper.DATABASE_URL}/${id}`)
+    fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}`)
       .then(this._validateResponse)
       .then(this._readResponseAsJSON)
       .then(result => {
@@ -107,6 +113,31 @@ export default class DBHelper {
           })
           .then(restaurant => callback(null, restaurant))
           .catch(() => callback('Restaurant does not exist', null));
+      });
+  }
+
+  static fetchRestaurantReviews(id, callback) {
+    fetch(`${DBHelper.DATABASE_URL}/reviews?restaurant_id=${id}`)
+      .then(this._validateResponse)
+      .then(this._readResponseAsJSON)
+      .then(result => {
+        this.DB.then(db => {
+          const tx = db.transaction(this.DB_REVIEWS_STORE, 'readwrite'),
+                dbStore = tx.objectStore(this.DB_REVIEWS_STORE);
+          dbStore.put({ id: parseInt(id), reviews: result });
+        });
+        callback(null, result);
+      })
+      .catch(error => {
+        this.DB
+          .then(db => {
+            const tx = db.transaction(this.DB_REVIEWS_STORE),
+                  dbStore = tx.objectStore(this.DB_REVIEWS_STORE);
+
+            return dbStore.get(parseInt(id)).reviews;
+          })
+          .then(reviews => callback(null, reviews))
+          .catch(() => callback('No reviews yet!', null));
       });
   }
 

@@ -75,6 +75,14 @@ const fetchRestaurantFromURL = callback => {
       fillRestaurantHTML();
       callback(null, restaurant);
     });
+    DBHelper.fetchRestaurantReviews(id, (error, reviews) => {
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+      // fill reviews
+      fillReviewsHTML(reviews);
+    });
   }
 };
 
@@ -102,8 +110,6 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
 };
 
 /**
@@ -163,7 +169,14 @@ const createReviewHTML = review => {
   title.appendChild(name);
 
   const date = document.createElement('div');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.createdAt).toLocaleDateString(navigator.language || 'en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
   date.className = 'review-date';
   title.appendChild(date);
 
