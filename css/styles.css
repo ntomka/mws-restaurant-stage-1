@@ -83,6 +83,13 @@ section {
   text-transform: uppercase;
 }
 
+.clearfix {
+  clear: both;
+}
+
+.hidden {
+  display: none;
+}
 
 /* ====================== Navigation ====================== */
 
@@ -153,6 +160,8 @@ nav.breadcrumb {
 
 /* ====================== Map ====================== */
 
+#review-form-save-button,
+#add-review-button,
 #load-map-button {
   margin: 2rem auto;
   background-color: #804d11;
@@ -164,6 +173,7 @@ nav.breadcrumb {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 #load-map-button + #map {
@@ -416,6 +426,15 @@ nav.breadcrumb {
   padding-bottom: 1pt;
 }
 
+#reviews-container h3 {
+  float: left;
+}
+
+#add-review-button {
+  float: right;
+  margin: 10px 0;
+}
+
 #reviews-list {
   margin: 0;
   padding: 0;
@@ -474,4 +493,70 @@ nav.breadcrumb {
 
 #restaurant-hours td {
   color: #666;
+}
+
+#review-form-container {
+  font-size: 1rem;
+  background-color: #fff;
+  border: 2px solid #f3f3f3;
+  overflow: hidden;
+  padding: 70px 20px 20px 20px;
+  position: relative;
+  border-radius: 30px 0;
+}
+
+#review-form-container .review-form-title {
+  background-color: #333;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 20px * 2);
+  height: 50px;
+  font-size: 1.5rem;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#review-form {
+  position: relative;
+}
+
+#review-form:after {
+  content: "⏳";
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.8);
+  font-size: 2rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#review-form.progress:after {
+  display: flex;
+}
+
+#review-form label {
+  display: block;
+  padding: 10px 0 5px 0;
+}
+
+#review-form input,
+#review-form select,
+#review-form textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+#review-form textarea {
+  min-height: 200px;
 }

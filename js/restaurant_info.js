@@ -138,9 +138,47 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
  */
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
+  const reviewFormConatiner = document.getElementById('review-form-container');
+  const addReviewButton = document.getElementById('add-review-button');
+  const reviewFormSaveButton = document.getElementById('review-form-save-button');
+  const reviewForm = document.getElementById('review-form');
+
+  addReviewButton.addEventListener('click', () => {
+    reviewFormConatiner.classList.toggle('hidden');
+  });
+
+  reviewFormSaveButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(reviewForm);
+
+    formData.set('restaurant_id', self.restaurant.id);
+
+    reviewForm.classList.add('progress');
+
+    DBHelper
+      .postRestaurantReview(formData)
+      .then(result => {
+        reviewFormConatiner.classList.toggle('hidden');
+
+        reviewForm.name.value = '';
+        reviewForm.rating.value = 5;
+        reviewForm.comments.value = '';
+
+        ul.appendChild(createReviewHTML(result));
+
+        document.getElementById(`review-${result.id}`).scrollIntoView();
+
+        reviewForm.classList.remove('progress');
+      })
+      .catch(error => {
+        console.error(error);
+
+        reviewForm.classList.remove('progress');
+      });
+
+    return false;
+  });
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -152,7 +190,6 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
 };
 
 /**
@@ -160,6 +197,9 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 const createReviewHTML = review => {
   const li = document.createElement('li');
+
+  li.id = `review-${review.id}`;
+
   const title = document.createElement('div');
   title.className = 'review-title';
 

@@ -141,6 +141,23 @@ export default class DBHelper {
       });
   }
 
+  static postRestaurantReview(review) {
+    return new Promise((resolve, reject) => {
+      fetch(`${DBHelper.DATABASE_URL}/reviews`, {
+        method: 'POST',
+        body: review
+      })
+      .then(this._validateResponse)
+      .then(this._readResponseAsJSON)
+      .then(result => {
+        resolve(result);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
+  }
+
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */

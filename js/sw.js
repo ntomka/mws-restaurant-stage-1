@@ -1,7 +1,7 @@
 import DBHelper from './dbhelper';
 
 const appCaches = {
-  static: 'restaurant-static-v3',
+  static: 'restaurant-static-v4',
   images: 'restaurant-images-v2'
 };
 
