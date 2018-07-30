@@ -150,6 +150,14 @@ const createRestaurantHTML = restaurant => {
 
   li.append(figure);
 
+  const isFavorited = (typeof restaurant.is_favorite === 'boolean' && restaurant.is_favorite) || restaurant.is_favorite === 'true';
+  const favoriteIcon = document.createElement('i');
+  favoriteIcon.className = `favorite-icon ${isFavorited ? 'show' : 'hide'}`;
+  favoriteIcon.title = 'Favorited';
+  favoriteIcon.innerHTML = '★';
+
+  li.append(favoriteIcon);
+
   const divContainer = document.createElement('div');
   divContainer.tabIndex = 0;
   divContainer.setAttribute('aria-label', `Address of ${restaurant.name} restaurant`);

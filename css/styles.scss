@@ -232,6 +232,7 @@ nav {
   flex-wrap: wrap;
   justify-content: center;
   li {
+    position: relative;
     background-color: #fff;
     font-family: Arial, sans-serif;
     margin: 15px;
@@ -239,49 +240,63 @@ nav {
     max-width: 330px;
     border-radius: 30px 0px;
     overflow: hidden;
-  }
-  figure {
-    display: block;
-    width: 100%;
-    margin: 0;
-  }
-  .restaurant-img {
-    background-color: #ccc;
-    display: block;
-    margin: 0;
-    width: 100%;
-  }
-  li {
-    figcaption {
-      color: #804d11;
-      font-family: Arial, sans-serif;
-      font-size: 14pt;
-      font-weight: 200;
-      letter-spacing: 0;
-      line-height: 1.3;
-      margin: 20px 0 10px;
+
+    figure {
+      display: block;
+      width: 100%;
+      margin: 0;
+      .restaurant-img {
+        background-color: #ccc;
+        display: block;
+        margin: 0;
+        width: 100%;
+      }
+      figcaption {
+        color: #804d11;
+        font-family: Arial, sans-serif;
+        font-size: 14pt;
+        font-weight: 200;
+        letter-spacing: 0;
+        line-height: 1.3;
+        margin: 20px 0 10px;
+        text-transform: uppercase;
+      }
+    }
+
+    .favorite-icon {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-style: normal;
+      font-size: 20pt;
+      color: yellow;
+      text-shadow: 0 0 2px #804d11;
+      &.show {
+        display: block;
+      }
+    }
+
+    a {
+      background-color: #804d11;
+      border-bottom: 3px solid #eee;
+      color: #fff;
+      display: block;
+      font-size: 10pt;
+      margin: 15px 0 0;
+      padding: 8px 30px 10px;
+      text-align: center;
+      text-decoration: none;
       text-transform: uppercase;
     }
-    .restaurant-info-container,
-    figcaption {
-      padding: 0 30px 25px;
-    }
+  }
+  .restaurant-info-container,
+  figcaption {
+    padding: 0 30px 25px;
   }
   p {
     margin: 0;
     font-size: 11pt;
-  }
-  li a {
-    background-color: #804d11;
-    border-bottom: 3px solid #eee;
-    color: #fff;
-    display: block;
-    font-size: 10pt;
-    margin: 15px 0 0;
-    padding: 8px 30px 10px;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
   }
 }
 
@@ -316,25 +331,50 @@ nav {
   }
 }
 
-#restaurant-name {
-  color: #804d11;
-  font-family: Arial, sans-serif;
-  font-size: 20pt;
-  font-weight: 200;
-  letter-spacing: 0;
-  margin: 15px 0 30px;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
 #restaurant-container {
   order: 2;
+
   figure {
     display: block;
     margin: 0;
     border-radius: 30px 0 30px 0;
     overflow: hidden;
     max-width: 880px;
+  }
+
+  .restaurant-name-favorite-container {
+    display: flex;
+    justify-content: space-between;
+
+    #restaurant-name {
+      font-family: Arial, sans-serif;
+      font-weight: 200;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    #restaurant-favorite {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+
+      &:after {
+        content: '☆';
+        display: block;
+      }
+
+      &.favorited:after {
+        content: '★';
+      }
+    }
+
+    #restaurant-name,
+    #restaurant-favorite {
+      font-size: 20pt;
+      margin: 15px 0 30px;
+      line-height: 1.1;
+      color: #804d11;
+    }
   }
 }
 

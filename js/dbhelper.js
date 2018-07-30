@@ -157,6 +157,34 @@ export default class DBHelper {
       });
   }
 
+  static favoriteRestaurant(id, isFavorite) {
+    return new Promise((resolve, reject) => {
+      fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}?is_favorite=${isFavorite}`, { method: 'PUT' })
+        .then(this._validateResponse)
+        .then(this._readResponseAsJSON)
+        .then(result => {
+          this.DB.then(db => {
+            const tx = db.transaction(this.DB_STORE, 'readwrite'),
+              dbStore = tx.objectStore(this.DB_STORE);
+            dbStore.put(result);
+          });
+          resolve(result);
+        })
+        .catch(error => {
+          console.error(error);
+          this.DB
+            .then(db => {
+              const tx = db.transaction(this.DB_STORE),
+                dbStore = tx.objectStore(this.DB_STORE);
+
+              return dbStore.get(parseInt(id));
+            })
+            .then(restaurant => resolve(restaurant))
+            .catch(error => reject(error));
+        });
+    });
+  }
+
   static fetchRestaurantReviews(id, callback) {
     fetch(`${DBHelper.DATABASE_URL}/reviews?restaurant_id=${id}`)
       .then(this._validateResponse)

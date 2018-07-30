@@ -95,6 +95,21 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   name.innerHTML = restaurant.name;
   name.setAttribute('aria-label', `${restaurant.name} restaurant`);
 
+  const favoriteButtonClassSelect = (restaurant) => {
+    if ((typeof restaurant.is_favorite === 'boolean' && restaurant.is_favorite) || restaurant.is_favorite === 'true') {
+      favoriteButton.classList.add('favorited');
+    } else {
+      favoriteButton.classList.remove('favorited');
+    }
+  };
+
+  const favoriteButton = document.getElementById('restaurant-favorite');
+  favoriteButtonClassSelect(restaurant);
+  favoriteButton.addEventListener('click', () => {
+    DBHelper.favoriteRestaurant(restaurant.id, typeof restaurant.is_favorite === 'boolean' ? !restaurant.is_favorite : restaurant.is_favorite !== 'true')
+            .then(favoriteButtonClassSelect);
+  });
+
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
