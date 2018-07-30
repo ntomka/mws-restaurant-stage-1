@@ -1,4 +1,5 @@
 import DBHelper from './dbhelper';
+import offlineForms from './OfflineForms';
 
 self.map;
 
@@ -118,18 +119,20 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
   hours.setAttribute('aria-label', `Operating hours of ${self.restaurant.name} restaurant`);
-  for (let key in operatingHours) {
-    const row = document.createElement('tr');
+  for (const key in operatingHours) {
+    if (operatingHours.hasOwnProperty(key)) {
+      const row = document.createElement('tr');
 
-    const day = document.createElement('td');
-    day.innerHTML = key;
-    row.appendChild(day);
+      const day = document.createElement('td');
+      day.innerHTML = key;
+      row.appendChild(day);
 
-    const time = document.createElement('td');
-    time.innerHTML = operatingHours[key];
-    row.appendChild(time);
+      const time = document.createElement('td');
+      time.innerHTML = operatingHours[key];
+      row.appendChild(time);
 
-    hours.appendChild(row);
+      hours.appendChild(row);
+    }
   }
 };
 
@@ -138,13 +141,13 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
  */
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const reviewFormConatiner = document.getElementById('review-form-container');
+  const reviewFormContainer = document.getElementById('review-form-container');
   const addReviewButton = document.getElementById('add-review-button');
   const reviewFormSaveButton = document.getElementById('review-form-save-button');
   const reviewForm = document.getElementById('review-form');
 
   addReviewButton.addEventListener('click', () => {
-    reviewFormConatiner.classList.toggle('hidden');
+    reviewFormContainer.classList.toggle('hidden');
   });
 
   reviewFormSaveButton.addEventListener('click', (e) => {
@@ -156,23 +159,25 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 
     reviewForm.classList.add('progress');
 
-    DBHelper
-      .postRestaurantReview(formData)
-      .then(result => {
-        reviewFormConatiner.classList.toggle('hidden');
+    offlineForms
+      .submit('postRestaurantReview', formData)
+      .then(resultReview => {
+        reviewFormContainer.classList.toggle('hidden');
 
         reviewForm.name.value = '';
         reviewForm.rating.value = 5;
         reviewForm.comments.value = '';
 
-        ul.appendChild(createReviewHTML(result));
+        ul.appendChild(createReviewHTML(resultReview));
 
-        document.getElementById(`review-${result.id}`).scrollIntoView();
+        document.getElementById(`review-${resultReview.id}`).scrollIntoView();
 
         reviewForm.classList.remove('progress');
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
+        reviewForm.name.value = '';
+        reviewForm.rating.value = 5;
+        reviewForm.comments.value = '';
 
         reviewForm.classList.remove('progress');
       });

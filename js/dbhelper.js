@@ -17,7 +17,7 @@ export default class DBHelper {
   }
 
   static get DB_VERSION() {
-    return 2;
+    return 3;
   }
 
   static get DB_NAME() {
@@ -32,6 +32,10 @@ export default class DBHelper {
     return 'reviews';
   }
 
+  static get DB_OFFLINE_FORMS_STORE() {
+    return 'offline-forms';
+  }
+
   static get DB() {
     return idb.open(this.DB_NAME, this.DB_VERSION, upgradeDb => {
       switch (upgradeDb.oldVersion) {
@@ -39,6 +43,8 @@ export default class DBHelper {
           upgradeDb.createObjectStore(this.DB_STORE, { keyPath: 'id' });
         case 1:
           upgradeDb.createObjectStore(this.DB_REVIEWS_STORE, { keyPath: 'id' });
+        case 2:
+          upgradeDb.createObjectStore(this.DB_OFFLINE_FORMS_STORE, { keyPath: 'formid' });
       }
     });
   }
@@ -52,6 +58,41 @@ export default class DBHelper {
 
   static _readResponseAsJSON(response) {
     return response.json();
+  }
+
+  static storeOfflineForm(formData) {
+    this.DB.then(db => {
+      const tx = db.transaction(this.DB_OFFLINE_FORMS_STORE, 'readwrite');
+      const dbStore = tx.objectStore(this.DB_OFFLINE_FORMS_STORE);
+
+      dbStore.put(formData);
+
+      return tx.complete;
+    });
+  }
+
+  static getOfflineForms() {
+    return new Promise((resolve, reject) => {
+      this.DB
+        .then(db => {
+          const tx = db.transaction(this.DB_OFFLINE_FORMS_STORE);
+          const dbStore = tx.objectStore(this.DB_OFFLINE_FORMS_STORE);
+
+          return dbStore.getAll();
+        })
+        .then(formDatas => resolve(formDatas))
+        .catch(error => reject(error));
+    });
+  }
+
+  static removeOfflineForm(formid) {
+    this.DB
+      .then(db => {
+        const tx = db.transaction(this.DB_OFFLINE_FORMS_STORE, 'readwrite');
+        const dbStore = tx.objectStore(this.DB_OFFLINE_FORMS_STORE);
+
+        dbStore.delete(formid);
+      });
   }
 
   /**

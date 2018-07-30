@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const Encore = require('@symfony/webpack-encore');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 Encore
   // the project directory where compiled assets will be stored
@@ -12,7 +13,10 @@ Encore
   // uncomment to define the assets of the project
   .addEntry('main', './js/main.js')
   .addEntry('restaurant_info', './js/restaurant_info.js')
-  .addStyleEntry('styles', './css/styles.css')
+  // .addStyleEntry('styles', './css/styles.css')
+  .addStyleEntry('styles', './css/styles.scss')
+
+  .enableSassLoader()
 
   .configureBabel(babelConfig => {
     babelConfig.presets.push('stage-3');
@@ -34,6 +38,14 @@ Encore
   );
 
 const siteConfig = Encore.getWebpackConfig();
+
+// Remove the old version of uglify js first
+siteConfig.plugins = siteConfig.plugins.filter(
+  plugin => !(plugin instanceof webpack.optimize.UglifyJsPlugin)
+);
+
+// Add the new one
+siteConfig.plugins.push(new UglifyJsPlugin());
 
 siteConfig.name = 'siteConfig';
 
